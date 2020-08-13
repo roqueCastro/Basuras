@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="15dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginEnd="15dp"
+    android:background="@drawable/card_border_color_tint"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageViewCaneca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:adjustViewBounds="true"
+            app:riv_corner_radius="12dp"
+            tools:ignore="MissingConstraints"
+            android:src="@drawable/papelera"/>
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@+id/imageViewCaneca"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+
+            android:text="Titulo"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/textViewContenido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@+id/textViewTitle"
+            android:layout_alignStart="@+id/textViewTitle"
+            android:layout_marginEnd="15dp"
+
+            android:text="Contenido"
+            android:textSize="13sp"
+            android:layout_marginBottom="15dp"
+            />
+
+        <TextView
+            android:id="@+id/textViewNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:visibility="gone"
+
+            android:textSize="15sp"
+            android:text="10"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:background="@drawable/shape_circle_noti"
+             />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

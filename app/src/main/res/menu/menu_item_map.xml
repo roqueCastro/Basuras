@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/action_more"
+        android:icon="@drawable/ic_more"
+        android:iconTint="@android:color/white"
+        app:showAsAction="always"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:title="TODO">
+
+        <menu>
+            <item
+                android:id="@+id/menu_streets"
+                android:icon="@drawable/crop__ic_cancel"
+                android:title="Streets"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/menu_dark"
+                android:icon="@drawable/crop__ic_done"
+                android:title="Dark"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/menu_light"
+                android:icon="@drawable/crop__ic_done"
+                android:title="Light"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/menu_outdoors"
+                android:icon="@drawable/crop__ic_done"
+                android:title="Outdoors"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/menu_satellite"
+                android:icon="@drawable/crop__ic_done"
+                android:title="Satelite"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/menu_satellite_streets"
+                android:icon="@drawable/crop__ic_done"
+                android:title="Satelito streets"
+                app:showAsAction="never" />
+
+        </menu>
+    </item>
+</menu>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+
+
+
+    <color name="card_bg_color">#f6f6f6</color>
+    <color name="title_text_color">#258bd6</color>
+    <color name="content_text_color">#999da4</color>
+    <color name="content_text_co">@android:color/black</color>
+
+    <color name="colorTextField">@color/colorAccent</color>
+    <color name="Verde_Claro">#5DE603</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSegundaryText">#757575</color>
+    <color name="colorDivider">#ECECEC</color>
+    <color name="colorTintAction">#251153</color>
+
+
+    <color name="bluedark">#2f333f</color>
+    <color name="bluelight">#49acd5</color>
+    <color name="green">#45bc62</color>
+    <color name="orange">#eaad43</color>
+    <color name="red">#DD0F00</color>
+</resources>
