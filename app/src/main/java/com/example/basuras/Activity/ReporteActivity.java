@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -44,6 +46,8 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
     private ArrayList<Reporte> reportes =  new ArrayList<>();
     private Drawable homeArrow,  backArrow;
     private boolean botom_home =  false;
+    private String id_reporte;
+    private ProgressDialog dialog;
 
 
     @Override
@@ -80,6 +84,9 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         );
+
+        registerForContextMenu(recyclerView);
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
@@ -142,6 +149,11 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
     @Override
     public void onError(String nameP, String response) {
         Log.d(nameP, response);
+        if (dialog != null){
+            if (dialog.isShowing()){
+                dialog.cancel();
+            }
+        }
         msj_snackbar(response, 2);//mensaje
     }
 
@@ -154,10 +166,21 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
                 insertData(reportes);
                 Log.d("", "");
                 break;
+            case "finalizador":
+                dialog.cancel();
+                if (response.equals("")){
+                    msj_snackbar("No se actualizo", 2);
+                }else if(response.equals("true")){
+                    msj_snackbar("Actualizacion exitosa.", 1);
+                    initAllData();
+                }else{
+                    msj_snackbar(response, 2);
+                }
+
+                Log.d("", "");
+                break;
         }
     }
-
-
 
     //CALLBACK ONITEMCLICK LISTENER
     @Override
@@ -178,7 +201,10 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
 
     @Override
     public void onLongClickAdapterReporte(int position, Reporte reporte, View v) {
-
+        if (reporte.getEstado().equals("0")){
+            id_reporte = reporte.getIdreporte();
+            v.showContextMenu();
+        }
     }
 
     //ON CLICK
@@ -200,7 +226,38 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
         }
     }
 
+    //menu context recycler
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.menu_delete, menu);
 
+        MenuItem itemm = menu.findItem(R.id.action_menu_delete);
+        itemm.setTitle("Finalizado");
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_menu_delete:
+                //
+                dialog = new ProgressDialog(this);
+//            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                dialog.setMessage("Finalizando...");
+                dialog.setIndeterminate(false);
+//            dialog.setMax(100);
+                dialog.setCancelable(false);
+                dialog.show();
+                //
+                apiVolley.usuarioAction(Utilidades_Request.URL, "finalizador", id_reporte,
+                        "","","","",""
+                );
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+
+    }
 
     //MENSAJES
     /*mensaje snackbar*/

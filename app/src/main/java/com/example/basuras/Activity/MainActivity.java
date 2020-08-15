@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -28,12 +29,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -124,7 +127,14 @@ public class MainActivity extends AppCompatActivity implements ApiVolley.TaskCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // inside your activity (if you did not enable transitions in your theme)
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        // set an exit transition
+        getWindow().setExitTransition(new Explode());
         setContentView(R.layout.activity_main);
+
+
+
 
         //Toolbar
         toolbar =  findViewById(R.id.main_toolBar);
@@ -147,16 +157,19 @@ public class MainActivity extends AppCompatActivity implements ApiVolley.TaskCal
 
     //RECYCLER
     private void initRecycler() {
-        recyclerView = findViewById(R.id.reclerViewMain);
-        recyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        );
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
-        recyclerView.setDrawingCacheEnabled(true);
-        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        adapter = new AdapterCaneca(canecas, this, notificationbooleand, (AdapterCaneca.onClickListenerAdapterCaneca) this);
-        recyclerView.setAdapter(adapter);
+        if (recyclerView == null){
+            recyclerView = findViewById(R.id.reclerViewMain);
+            recyclerView.setLayoutManager(
+                    new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            );
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setItemViewCacheSize(20);
+            recyclerView.setDrawingCacheEnabled(true);
+            recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+            adapter = new AdapterCaneca(canecas, this, notificationbooleand, (AdapterCaneca.onClickListenerAdapterCaneca) this);
+            recyclerView.setAdapter(adapter);
+
+        }
 
         initAllData();
     }
@@ -263,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements ApiVolley.TaskCal
         if(notificationbooleand){
             Intent intent = new Intent(this, ReporteActivity.class);
             intent.putExtra("caneca", caneca.getIdcaneca());
-            startActivity(intent);
+            startActivity(intent,  ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         }else{
             cane = caneca.getIdcaneca();
             showMenu(view);

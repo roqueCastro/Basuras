@@ -5,14 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 
 import com.example.basuras.Adapter.AdapterCaneca;
 import com.example.basuras.Adapter.AdapterUser;
@@ -30,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -43,10 +48,12 @@ public class UserActivity extends AppCompatActivity implements AdapterUser.OnCal
 
     private ArrayList<Usuario> usuarios = new ArrayList<>();
     private String id;
+    private String id_delete;
     private RecyclerView recyclerView;
     private AdapterUser adapter;
     private String url;
     private Gson json = new Gson();
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +68,13 @@ public class UserActivity extends AppCompatActivity implements AdapterUser.OnCal
         homeArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
         toolbar.setNavigationIcon(homeArrow);
 
-        apiVolley = new ApiVolley((ApiVolley.TaskCallbacks) this, this);
-    }
-
-
-    //RECYCLER
-    private void initRecycler() {
         recyclerView = findViewById(R.id.reclerViewUser);
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         );
+
+        registerForContextMenu(recyclerView);
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
@@ -78,8 +82,12 @@ public class UserActivity extends AppCompatActivity implements AdapterUser.OnCal
         adapter = new AdapterUser(this, (AdapterUser.OnCallBackAdapterUser) this);
         recyclerView.setAdapter(adapter);
 
-        initAllData();
+        apiVolley = new ApiVolley((ApiVolley.TaskCallbacks) this, this);
     }
+
+
+    //RECYCLER
+
 
     //ALL DATA
     private void initAllData() {
@@ -105,6 +113,11 @@ public class UserActivity extends AppCompatActivity implements AdapterUser.OnCal
     @Override
     public void onError(String nameP, String response) {
         Log.d(nameP, response);
+        if (dialog != null){
+            if (dialog.isShowing()){
+                dialog.cancel();
+            }
+        }
         msj_snackbar(response, 2);//mensaje
     }
 
@@ -117,8 +130,18 @@ public class UserActivity extends AppCompatActivity implements AdapterUser.OnCal
                 insertData(datosResponse);
                 Log.d("", "");
                 break;
-            case "insert_reporte":
-//                Log.d("", "");
+            case "delete_usuario":
+                dialog.cancel();
+                if (response.equals("")){
+                    msj_snackbar("No se elimino", 2);
+                }else if(response.equals("true")){
+                    msj_snackbar("Registro exitoso.", 1);
+                    initAllData();
+                }else{
+                    msj_snackbar(response, 2);
+                }
+
+                Log.d("", "");
                 break;
         }
     }
@@ -126,23 +149,26 @@ public class UserActivity extends AppCompatActivity implements AdapterUser.OnCal
     // //CALLBACK ADAPTER
     @Override
     public void onClickAdapter(int position, Usuario usuario, View v) {
-        ArrayList<Usuario> u = new ArrayList<>();
-        u.add(usuario);
-        String responseDatos = json.toJson(u);//convertir en jsonString
+
+
 
         Intent intent = new Intent(this, RegisterUActivity.class);
         intent.putExtra("operation", 1);
-        intent.putExtra("usuario", responseDatos);
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("usuario",usuario);
+        intent.putExtras(bundle);
+
         startActivity(intent);
     }
 
     @Override
-    public void onLongClickAdapter(int position, Usuario usuario, View v) {
-
+    public void onClickAdapterMore(int position, Usuario usuario, View v) {
+        id_delete = usuario.getIdusuario();
+        v.showContextMenu();
     }
 
     //ONCREATE MENU
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_reg, menu);
@@ -155,7 +181,6 @@ public class UserActivity extends AppCompatActivity implements AdapterUser.OnCal
 
         return super.onCreateOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -170,6 +195,44 @@ public class UserActivity extends AppCompatActivity implements AdapterUser.OnCal
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.d("","");
+        return super.onPrepareOptionsMenu(menu);
+
+    }
+
+    //CONTEXT MENU
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.menu_delete, menu); //infla el menu
+    }
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_menu_delete:
+                //
+                dialog = new ProgressDialog(this);
+//            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                dialog.setMessage("Eliminado...");
+                dialog.setIndeterminate(false);
+//            dialog.setMax(100);
+                dialog.setCancelable(false);
+                dialog.show();
+                //
+                apiVolley.usuarioAction(url, "delete_usuario", id_delete,
+                        "","","","",""
+                );
+
+                return true;
+            default:
+                Log.d("","");
+                return false;
+        }
+    }
+
+
 
     //MENSAJES
     private void msj_snackbar(String msj, int process){
@@ -191,7 +254,7 @@ public class UserActivity extends AppCompatActivity implements AdapterUser.OnCal
             String[] parts = response.split(",");
             id = parts[0]; // idusu
 
-            initRecycler();
+            initAllData();
         }
     }
 }

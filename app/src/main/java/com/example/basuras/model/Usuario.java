@@ -1,6 +1,8 @@
 package com.example.basuras.model;
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable {
 
     String idusuario, nombre_usu, correo_usu, password,  telefono, fecha_update, rol_idrol;
 

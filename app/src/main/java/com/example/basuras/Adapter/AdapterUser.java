@@ -1,6 +1,7 @@
 package com.example.basuras.Adapter;
 
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.collection.CircularArray;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,16 +32,18 @@ public class AdapterUser extends RecyclerView.Adapter<AdapterUser.ViewHolder> {
     private ArrayList<Usuario> usuarios;
     Context context;
     private OnCallBackAdapterUser callBack;
+    private SparseBooleanArray selected_items;
 
     public interface  OnCallBackAdapterUser{
         void onClickAdapter(int position, Usuario usuario, View v);
-        void onLongClickAdapter(int position, Usuario usuario, View v);
+        void onClickAdapterMore(int position, Usuario usuario, View v);
     }
 
     public AdapterUser(Context context, OnCallBackAdapterUser callBack) {
         this.usuarios = new ArrayList<>();
         this.context = context;
         this.callBack = callBack;
+        this.selected_items = new SparseBooleanArray();
     }
 
     @NonNull
@@ -52,6 +56,7 @@ public class AdapterUser extends RecyclerView.Adapter<AdapterUser.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull AdapterUser.ViewHolder holder, int position) {
         Usuario usuario = usuarios.get(position);
+
         holder.imprimirVector(usuario);
         try {
             holder.llenarInputs(usuario);
@@ -59,6 +64,8 @@ public class AdapterUser extends RecyclerView.Adapter<AdapterUser.ViewHolder> {
             e.printStackTrace();
         }
         holder.onClickListenerAdapter(position, usuario);
+
+        holder.setBackgroundContainer(position);
     }
 
     @Override
@@ -68,13 +75,14 @@ public class AdapterUser extends RecyclerView.Adapter<AdapterUser.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView vector;
+        private ImageView vector, more;
         private TextView name, user, telefono, date;
         private LinearLayout container;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             vector = itemView.findViewById(R.id.imageViewDrawableUser);
+            more = itemView.findViewById(R.id.imageViewMore);
             name = itemView.findViewById(R.id.textViewNameUser);
             user = itemView.findViewById(R.id.textViewCorUser);
             telefono = itemView.findViewById(R.id.textViewTeleUser);
@@ -115,10 +123,21 @@ public class AdapterUser extends RecyclerView.Adapter<AdapterUser.ViewHolder> {
                 @Override
                 public boolean onLongClick(View v) {
                     if (callBack!= null)
-                        callBack.onLongClickAdapter(position, usuario, v);
+                        callBack.onClickAdapterMore(position, usuario, v);
                     return true;
                 }
             });
+            //
+        }
+
+        public void setBackgroundContainer(int position) {
+            //
+            if (selected_items.get(position, false)){
+                container.setBackgroundColor(itemView.getResources().getColor(R.color.title_text_color));
+            }else{
+                container.setBackgroundColor(itemView.getResources().getColor(R.color.transparent));
+            }
+            //
         }
     }
 
@@ -132,5 +151,14 @@ public class AdapterUser extends RecyclerView.Adapter<AdapterUser.ViewHolder> {
         this.usuarios.clear();
         this.usuarios.addAll(list);
         diffResult.dispatchUpdatesTo(this);
+    }
+
+    public void selected(int pos){
+        if (selected_items.get(pos, false)) {
+            selected_items.delete(pos);
+        } else {
+            selected_items.put(pos, true);
+        }
+        notifyItemChanged(pos);
     }
 }

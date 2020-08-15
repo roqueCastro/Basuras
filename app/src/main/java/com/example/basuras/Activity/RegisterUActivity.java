@@ -75,8 +75,7 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
     @BindViews({ R.id.edittext_name, R.id.edittext_email, R.id.edittext_pass, R.id.edittext_phone }) List<EditText> nameViews;
     private Menu menuGlobal;
     private ArrayAdapter<CharSequence> adapter;
-    private ArrayList<Usuario> usuarios = new ArrayList<>();
-    private Gson json = new Gson();
+    private Usuario usuario;
     private ProgressDialog dialog;
 
 
@@ -100,14 +99,16 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
 
             toolbar.setTitle("Actualizar usuarios");
             disabledAllEdittext();
-            String data = getIntent().getExtras().getString("usuario");
-            Type dataAlType = new TypeToken<ArrayList<Usuario>>(){}.getType();
-            usuarios = json.fromJson(data,dataAlType);
-//            ButterKnife.
+
+            Bundle objetivoEnviado = getIntent().getExtras();
+            if(objetivoEnviado != null){
+                usuario = (Usuario) objetivoEnviado.getSerializable("usuario");
+            }
+            Log.d("","");
         }
         setSupportActionBar(toolbar);
         //tint 3 ponits menu white
-        final Drawable homeArrow = getResources().getDrawable(R.drawable.ic_arrow_back);
+        final Drawable homeArrow = getResources().getDrawable(R.drawable.selector_home);
         homeArrow.setColorFilter(getResources().getColor(android.R.color.black), PorterDuff.Mode.SRC_ATOP);
         toolbar.setNavigationIcon(homeArrow);
 
@@ -129,8 +130,7 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
     }
 
     private void llenarRol() {
-        if (usuarios != null && usuarios.size() > 0){
-            Usuario usuario = usuarios.get(0);
+        if (usuario != null){
             _name.setText(usuario.getNombre_usu());
             _email.setText(usuario.getCorreo_usu());
             _pass.setText(usuario.getPassword());
@@ -181,8 +181,23 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
 
         String url = Utilidades_Request.URL;
         switch (actionOperation){
-            case 1:
-                dialog.cancel();
+            case 22:
+                if(validarUpdate(name, usu, pass, tele, rol)){
+                    dialog.cancel();
+                    msj_snackbar("No tienes ningun dato modificado...", 2);
+                    enabledAllEdittext();
+                    return;
+                }
+                //########
+                disabledAllEdittext();
+                apiVolley.usuarioAction(url, "update_usuario", usuario.getIdusuario(),
+                        name,
+                        usu,
+                        pass,
+                        tele,
+                        rol
+                );
+                ///////////////////////////////////////////////////////////////////////////
                 break;
             default:
                 apiVolley.usuarioAction(url, "insert_usuario", "",
@@ -262,6 +277,30 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
         return valid;
     }
 
+    //VALIDATION UPDATE
+    private boolean validarUpdate(String name, String usu, String pass, String tele, String rol) {
+        boolean valid = true;
+
+        if (!usuario.getNombre_usu().equals(name)){
+            valid = false;
+        }
+        if (!usuario.getCorreo_usu().equals(usu)){
+            valid = false;
+        }
+        if (!usuario.getPassword().equals(pass)){
+            valid = false;
+        }
+        if (!usuario.getTelefono().equals(tele)){
+            valid = false;
+        }
+        if (!usuario.getRol_idrol().equals(rol)){
+            valid = false;
+        }
+        Log.d("","");
+
+        return  valid;
+    }
+
     //ENABLED EDTTEXT
     private void disabledAllEdittext() {
         for (EditText editText: nameViews){
@@ -320,7 +359,16 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
 
                 Log.d("", "");
                 break;
-            case "insert_reporte":
+            case "update_usuario":
+                dialog.cancel();
+                if (response.equals("")){
+                    msj_snackbar("No se registro: " + response, 2);
+                }else if(response.equals("true")){
+                    msj_snackbar("Registro exitoso.", 1);
+                    clearEdittext();
+                    finish();
+                }
+
 //                Log.d("", "");
                 break;
         }
@@ -412,4 +460,6 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
         //
         SnackBarClass.imprimir_messge_snackbar(snackbar, msj , process, this);
     }
+
+
 }

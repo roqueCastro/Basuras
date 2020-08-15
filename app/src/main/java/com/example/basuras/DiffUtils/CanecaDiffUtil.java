@@ -34,7 +34,8 @@ public class CanecaDiffUtil extends DiffUtil.Callback {
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldCanecas.get(oldItemPosition).getNombre_caneca().equals(newCanecas.get(newItemPosition).getNombre_caneca());
+//        return oldCanecas.get(oldItemPosition).getNombre_caneca().equals(newCanecas.get(newItemPosition).getNombre_caneca());
+        return oldCanecas.get(oldItemPosition).getCant_reportes() == newCanecas.get(newItemPosition).getCant_reportes();
     }
 
     @Nullable

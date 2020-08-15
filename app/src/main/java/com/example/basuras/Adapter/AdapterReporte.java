@@ -138,7 +138,7 @@ public class AdapterReporte extends RecyclerView.Adapter<AdapterReporte.ViewHold
                             return true;
                         }
                     });
-
+                    //##
                 }else{
                     add.setOnClickListener(new View.OnClickListener() {
                         @Override
