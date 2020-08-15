@@ -39,6 +39,10 @@ android {
 
 }
 
+
+// ...
+//apply plugin: 'com.jakewharton.butterknife'
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -60,6 +64,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+
+
+    //BUTTERKNIFE
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 
     //RECYCLER
     //noinspection GradleCompatible

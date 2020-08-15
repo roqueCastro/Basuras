@@ -12,6 +12,7 @@ public class Utilidades_Request {
 //    public static final String IP = "10.97.129.162/";
 //    public static final String IP = "192.168.100.69/";
     public static final String CARPETA = "ws/";
+    public static final String URL = HTTP + IP + CARPETA+ "ws_basura.php?";
 //    public static final String CARPETA = "_rutas-services_/";
     public static final String STORGE = "/storage/emulated/0/";
     public static final String STORGE_ALM_IMAGE = "MultiSelection/images/";

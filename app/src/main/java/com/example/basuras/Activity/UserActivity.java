@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -125,7 +126,14 @@ public class UserActivity extends AppCompatActivity implements AdapterUser.OnCal
     // //CALLBACK ADAPTER
     @Override
     public void onClickAdapter(int position, Usuario usuario, View v) {
+        ArrayList<Usuario> u = new ArrayList<>();
+        u.add(usuario);
+        String responseDatos = json.toJson(u);//convertir en jsonString
 
+        Intent intent = new Intent(this, RegisterUActivity.class);
+        intent.putExtra("operation", 1);
+        intent.putExtra("usuario", responseDatos);
+        startActivity(intent);
     }
 
     @Override
@@ -133,11 +141,31 @@ public class UserActivity extends AppCompatActivity implements AdapterUser.OnCal
 
     }
 
+    //ONCREATE MENU
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item_reg, menu);
+
+        MenuItem drawablePerson = menu.findItem(R.id.action_menu_item_enable);
+        drawablePerson.setIcon(getResources().getDrawable(R.drawable.ic_person_add));
+
+        Drawable drawable = drawablePerson.getIcon();
+        drawable.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.action_menu_item_enable:
+                Intent i = new Intent(this, RegisterUActivity.class);
+                i.putExtra("operation", 0);
+                startActivity(i);
                 break;
         }
         return super.onOptionsItemSelected(item);

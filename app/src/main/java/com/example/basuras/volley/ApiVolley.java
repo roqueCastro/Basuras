@@ -69,4 +69,41 @@ public class ApiVolley {
         };
         request.add(stringRequest);
     }
+
+    public void usuarioAction(
+            String url, final String operacion, final String id, final String name,
+            final String usu, final String pass, final String telefono, final String rol
+    ){
+        request = MySingleton.getInstance(context).getRequestQueue();
+        stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (mCallbacks != null){
+                    mCallbacks.onSucess(operacion, response);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (mCallbacks != null){
+                    mCallbacks.onError(operacion, error.getMessage());
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String,String> paramentros = new HashMap<>();
+                paramentros.put("Operacion", operacion);
+                paramentros.put("id", id);
+                paramentros.put("name", name);
+                paramentros.put("usu", usu);
+                paramentros.put("pass", pass);
+                paramentros.put("telefono", telefono);
+                paramentros.put("rol", rol);
+                return paramentros;
+            }
+        };
+        request.add(stringRequest);
+    }
 }
