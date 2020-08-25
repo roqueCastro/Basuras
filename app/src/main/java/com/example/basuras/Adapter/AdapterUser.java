@@ -75,14 +75,14 @@ public class AdapterUser extends RecyclerView.Adapter<AdapterUser.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView vector, more;
+        private ImageView vector;
         private TextView name, user, telefono, date;
         private LinearLayout container;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             vector = itemView.findViewById(R.id.imageViewDrawableUser);
-            more = itemView.findViewById(R.id.imageViewMore);
+
             name = itemView.findViewById(R.id.textViewNameUser);
             user = itemView.findViewById(R.id.textViewCorUser);
             telefono = itemView.findViewById(R.id.textViewTeleUser);

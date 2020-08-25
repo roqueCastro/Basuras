@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.balysv.materialripple.MaterialRippleLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/RippleStyleUser"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="60dp"
+    >
 
     <TextView
         android:id="@+id/textViewAdd"
@@ -11,8 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Archivados default"
         android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="60dp"
+        android:layout_margin="20dp"
         />
 
-</LinearLayout>
+</com.balysv.materialripple.MaterialRippleLayout>

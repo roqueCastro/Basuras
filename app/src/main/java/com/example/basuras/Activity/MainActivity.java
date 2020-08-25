@@ -189,6 +189,9 @@ public class MainActivity extends AppCompatActivity implements ApiVolley.TaskCal
         //
         Type dataAlTypeR = new TypeToken<ArrayList<Reporte>>(){}.getType();
         reportes = json.fromJson(datosResponse.get(0).getReporte(),dataAlTypeR);
+
+        Type dataAlTypeU = new TypeToken<ArrayList<Usuario>>(){}.getType();
+        usuarios = json.fromJson(datosResponse.get(0).getUsuarios(),dataAlTypeU);
         //
         adapter.adicionarElementos(canecas);
 
@@ -336,6 +339,14 @@ public class MainActivity extends AppCompatActivity implements ApiVolley.TaskCal
             case R.id.menu_main_person:
                 if (notificationbooleand){
                     startActivity(new Intent(this, UserActivity.class));
+                }else{
+                    Intent intent = new Intent(this, RegistroUActivity.class);
+                    intent.putExtra("proceso", true);
+                    Usuario usuario = usuarios.get(0);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("usuario",usuario);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
                 break;
         }

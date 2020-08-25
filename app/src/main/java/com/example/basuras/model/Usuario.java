@@ -4,15 +4,16 @@ import java.io.Serializable;
 
 public class Usuario implements Serializable {
 
-    String idusuario, nombre_usu, correo_usu, password,  telefono, fecha_update, rol_idrol;
+    String idusuario, nombre_usu, correo_usu, password,  telefono, direccion,  fecha_update, rol_idrol;
 
 
-    public Usuario(String idusuario, String nombre_usu, String correo_usu, String password, String telefono, String fecha_update, String rol_idrol) {
+    public Usuario(String idusuario, String nombre_usu, String correo_usu, String password, String telefono, String direccion, String fecha_update, String rol_idrol) {
         this.idusuario = idusuario;
         this.nombre_usu = nombre_usu;
         this.correo_usu = correo_usu;
         this.password = password;
         this.telefono = telefono;
+        this.direccion = direccion;
         this.fecha_update = fecha_update;
         this.rol_idrol = rol_idrol;
     }
@@ -74,5 +75,13 @@ public class Usuario implements Serializable {
 
     public void setRol_idrol(String rol_idrol) {
         this.rol_idrol = rol_idrol;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 }

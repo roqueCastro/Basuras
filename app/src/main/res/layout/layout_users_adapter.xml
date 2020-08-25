@@ -117,21 +117,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_centerVertical="true"
                     android:textSize="12sp"
                     android:text="10:30 AM"
                     android:textColor="@android:color/black" />
 
-                <ImageView
-                    android:id="@+id/imageViewMore"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_more"
-                    android:layout_marginRight="10dp"
-                    android:layout_alignParentEnd="true"
-                    android:textColor="@android:color/black"
-                    android:layout_alignParentRight="true" />
+
 
             </RelativeLayout>
 

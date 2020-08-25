@@ -11,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
 
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -20,6 +21,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -72,7 +74,7 @@ dependencies {
 
     //RECYCLER
     //noinspection GradleCompatible
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
     //librerias EDITTEXT Y CARD VIEW
     implementation 'androidx.cardview:cardview:1.0.0-beta01'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'

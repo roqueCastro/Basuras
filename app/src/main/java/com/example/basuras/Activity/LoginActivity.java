@@ -13,6 +13,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -38,6 +39,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
+    TextView ac_register;
     EditText _email, _pass;
     Button _signl;
     TextInputLayout _inputPass;
@@ -57,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
         request = Volley.newRequestQueue(getApplicationContext());
 
+        ac_register = findViewById(R.id.link_register);
         _email = findViewById(R.id.edittext_email);
         _pass = findViewById(R.id.edittext_pass);
         _inputPass = findViewById(R.id.textInputPass);
@@ -67,6 +70,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signUp();
+            }
+        });
+
+        ac_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this, RegistroUActivity.class);
+                i.putExtra("proceso", false);
+                startActivity(i);
+                finish();
             }
         });
     }

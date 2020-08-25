@@ -30,6 +30,7 @@ public class AdapterReporte extends RecyclerView.Adapter<AdapterReporte.ViewHold
     public static final int VIEW_TYPE_N = 0;
     public static final int VIEW_TYPE_F = 1;
     private int VIEW_STATE;
+    private int archivados;
     private ArrayList<Reporte> reportes;
     private CallbackOnClickListener onClickListener;
 
@@ -108,17 +109,17 @@ public class AdapterReporte extends RecyclerView.Adapter<AdapterReporte.ViewHold
                     String m = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.UK).format(myDate);
                     date.setText(m);
                 }else{
-                    add.setText("Ver reportes archivados.");
+                    add.setText("Reportes archivados (" + archivados + ").");
                 }
 
             }else if(VIEW_STATE ==2){
-                add.setText("Ver reportes archivados.");
+                add.setText("Reportes archivados (" + archivados + ").");
             }
         }
 
         void onClicklistener(final int position, final Reporte reporte){
             if (VIEW_STATE == 1){
-                if (reporte.getIdreporte() != "10000"){
+                if (!reporte.getIdreporte().equals("10000") ){
                     //##
                     container.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -131,22 +132,12 @@ public class AdapterReporte extends RecyclerView.Adapter<AdapterReporte.ViewHold
                     container.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
-
                             if (onClickListener != null)
                                 onClickListener.onLongClickAdapterReporte(position, reporte, v);
-
                             return true;
                         }
                     });
                     //##
-                }else{
-                    add.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (onClickListener != null)
-                                onClickListener.onClickAdapterReporte(position,reporte,v, 2);
-                        }
-                    });
                 }
 
             }else if(VIEW_STATE ==2){
@@ -173,7 +164,11 @@ public class AdapterReporte extends RecyclerView.Adapter<AdapterReporte.ViewHold
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void adicionarElementos(ArrayList<Reporte> list) {
+    public void adicionarElementos(ArrayList<Reporte> list, int archivados) {
+        if (archivados!= 0){
+            this.archivados = archivados;
+        }
+
         //diff utils
         ReporteDiffUtil reporteDiffUtil = new ReporteDiffUtil(this.reportes, list);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(reporteDiffUtil);

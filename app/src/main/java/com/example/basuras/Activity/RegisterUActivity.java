@@ -65,6 +65,7 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
     @BindView(R.id.edittext_email) EditText _email;
     @BindView(R.id.edittext_pass) EditText _pass;
     @BindView(R.id.edittext_phone) EditText _phone;
+    @BindView(R.id.edittext_direcciona) EditText _direccion;
 
     @BindView(R.id.btn_signupR) Button _btnregistro;
 
@@ -72,7 +73,7 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
 
     @BindView(R.id.autoCompleteRol)    AutoCompleteTextView rol;
 
-    @BindViews({ R.id.edittext_name, R.id.edittext_email, R.id.edittext_pass, R.id.edittext_phone }) List<EditText> nameViews;
+    @BindViews({ R.id.edittext_name, R.id.edittext_email, R.id.edittext_pass, R.id.edittext_phone, R.id.edittext_direcciona }) List<EditText> nameViews;
     private Menu menuGlobal;
     private ArrayAdapter<CharSequence> adapter;
     private Usuario usuario;
@@ -135,6 +136,7 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
             _email.setText(usuario.getCorreo_usu());
             _pass.setText(usuario.getPassword());
             _phone.setText(usuario.getTelefono());
+            _direccion.setText(usuario.getDireccion());
             id_rol = usuario.getRol_idrol();
             if (usuario.getRol_idrol().equals("1")){
                 rol.setText("Administrador");
@@ -169,6 +171,7 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
         String usu = _email.getText().toString();
         String pass = _pass.getText().toString();
         String tele = _phone.getText().toString();
+        String direccion = _direccion.getText().toString();
         String rol = id_rol;
 
         dialog = new ProgressDialog(this);
@@ -182,7 +185,7 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
         String url = Utilidades_Request.URL;
         switch (actionOperation){
             case 22:
-                if(validarUpdate(name, usu, pass, tele, rol)){
+                if(validarUpdate(name, usu, pass, tele, direccion,  rol)){
                     dialog.cancel();
                     msj_snackbar("No tienes ningun dato modificado...", 2);
                     enabledAllEdittext();
@@ -195,6 +198,7 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
                         usu,
                         pass,
                         tele,
+                        direccion,
                         rol
                 );
                 ///////////////////////////////////////////////////////////////////////////
@@ -205,6 +209,7 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
                         usu,
                         pass,
                         tele,
+                        direccion,
                         rol
                 );
         }
@@ -227,6 +232,7 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
         String ema = _email.getText().toString();
         String pass = _pass.getText().toString();
         String phone = _phone.getText().toString();
+        String direccion = _direccion.getText().toString();
 
         //|| !Patterns.EMAIL_ADDRESS.matcher(ema).matches()
         if (name.isEmpty() ) {
@@ -265,6 +271,13 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
             _phone.setError(null);
         }
 
+        if (direccion.isEmpty() ) {
+            _direccion.setError("Requerido");
+            valid = false;
+        } else {
+            _direccion.setError(null);
+        }
+
         if (id_rol == null) {
             rol.setError("Requerido");
             valid = false;
@@ -278,7 +291,7 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
     }
 
     //VALIDATION UPDATE
-    private boolean validarUpdate(String name, String usu, String pass, String tele, String rol) {
+    private boolean validarUpdate(String name, String usu, String pass, String tele, String direccion, String rol) {
         boolean valid = true;
 
         if (!usuario.getNombre_usu().equals(name)){
@@ -291,6 +304,9 @@ public class RegisterUActivity extends AppCompatActivity implements ApiVolley.Ta
             valid = false;
         }
         if (!usuario.getTelefono().equals(tele)){
+            valid = false;
+        }
+        if (!usuario.getDireccion().equals(direccion)){
             valid = false;
         }
         if (!usuario.getRol_idrol().equals(rol)){

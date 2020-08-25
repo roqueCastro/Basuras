@@ -48,6 +48,7 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
     private boolean botom_home =  false;
     private String id_reporte;
     private ProgressDialog dialog;
+    private boolean validOnMenuLong = false;
 
 
     @Override
@@ -108,9 +109,12 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
     private void insertData(ArrayList<Reporte> newReportes) {
         ArrayList<Reporte> reportesD = new ArrayList<>();
         int e = 0;
+        int ar = 0;
         for (Reporte r: newReportes){
+
             if (r.getEstado().equals("0")){
                 reportesD.add(r);
+                ar++;
             }else{
                 e = 1;
             }
@@ -122,7 +126,8 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
                     "","","", ""));
         }
 
-        adapter.adicionarElementos(reportesD);
+        ar =  newReportes.size() - ar;
+        adapter.adicionarElementos(reportesD, ar);
         if (reportes.size() == 0){
             finish();
         }
@@ -142,7 +147,7 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
                 newRe.add(r);
             }
         }
-        adapter.adicionarElementos(newRe);
+        adapter.adicionarElementos(newRe, 0);
     }
 
     //CALLBACK VOLLEY
@@ -202,6 +207,7 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
     @Override
     public void onLongClickAdapterReporte(int position, Reporte reporte, View v) {
         if (reporte.getEstado().equals("0")){
+            validOnMenuLong = true;
             id_reporte = reporte.getIdreporte();
             v.showContextMenu();
         }
@@ -230,10 +236,15 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.menu_delete, menu);
 
-        MenuItem itemm = menu.findItem(R.id.action_menu_delete);
-        itemm.setTitle("Finalizado");
+        if (validOnMenuLong){
+            validOnMenuLong =false;
+            getMenuInflater().inflate(R.menu.menu_delete, menu);
+
+            MenuItem itemm = menu.findItem(R.id.action_menu_delete);
+            itemm.setTitle("Finalizado");
+        }
+
     }
 
     @Override
@@ -250,7 +261,7 @@ public class ReporteActivity extends AppCompatActivity implements ApiVolley.Task
                 dialog.show();
                 //
                 apiVolley.usuarioAction(Utilidades_Request.URL, "finalizador", id_reporte,
-                        "","","","",""
+                        "","","","","",""
                 );
                 return true;
             default:

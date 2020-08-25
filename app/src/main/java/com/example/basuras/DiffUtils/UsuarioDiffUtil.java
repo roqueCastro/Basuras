@@ -34,7 +34,29 @@ public class UsuarioDiffUtil extends DiffUtil.Callback {
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldUsuarios.get(oldItemPosition).getNombre_usu().equals(newUsuarios.get(newItemPosition).getNombre_usu());
+        boolean valid = true;
+        Usuario oldUsuario = oldUsuarios.get(oldItemPosition);
+        Usuario newUsuario = newUsuarios.get(newItemPosition);
+
+        if (!oldUsuario.getNombre_usu().equals(newUsuario.getNombre_usu())){
+            valid = false;
+        }
+        if (!oldUsuario.getCorreo_usu().equals(newUsuario.getCorreo_usu())){
+            valid = false;
+        }
+        if (!oldUsuario.getPassword().equals(newUsuario.getPassword())){
+            valid = false;
+        }
+        if (!oldUsuario.getTelefono().equals(newUsuario.getTelefono())){
+            valid = false;
+        }
+        if (!oldUsuario.getFecha_update().equals(newUsuario.getFecha_update())){
+            valid = false;
+        }
+        if (!oldUsuario.getRol_idrol().equals(newUsuario.getRol_idrol())){
+            valid = false;
+        }
+        return valid;
     }
 
     @Nullable

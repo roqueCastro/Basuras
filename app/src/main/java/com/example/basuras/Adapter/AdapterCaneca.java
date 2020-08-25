@@ -35,6 +35,7 @@ public class AdapterCaneca extends RecyclerView.Adapter<AdapterCaneca.ViewHolder
     @NonNull
     @Override
     public AdapterCaneca.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_view_canecas , parent, false);
         return new ViewHolder(view);
     }
